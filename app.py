@@ -12,18 +12,37 @@
 # imports
 ###
 
+import os
 import sys
+import discord
+from discord.ext import commands
+import asyncio
+import time
 
-###
-# main
-###
+bot = commands.Bot(command_prefix = "/")
 
-def main():
-    print("hello world")
+
+@bot.command("a")
+async def copy(ctx):
+    await ctx.send("Starting downloading!")
+    print(ctx.guild)
+    print(ctx.channel)
+    print(ctx.cog)
+    with open("file.txt", "w", encoding='utf-8') as f:
+        async for message in ctx.history():
+            if message.author != bot.user:
+                d = []
+                d.append(message.author)
+                d.append(message.content)
+                d.append(message.reactions)
+
+                f.write(str(d) +"\n")
+
+    await ctx.send("Done!")
 
 if __name__ == '__main__':
     try:
-        main()
+        bot.run('')
     except Exception as e:
         print('Exited with error: {}'.format(e))
         sys.exit(1)
